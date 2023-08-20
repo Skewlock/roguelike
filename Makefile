@@ -1,7 +1,7 @@
 CC		= g++
 CFLAGS	= 
 INCLUDE	= -I ./olcPixelGameEngine -I ./include
-GFLAGS	= -lX11 -lGL -lpthread -lpng -lstdc++fs -std=c++17
+GFLAGS	= -lSDL2_image -g `sdl2-config --cflags --libs`
 SRC_DIR	= src
 OBJ_DIR	= obj
 SRCS	= $(wildcard $(SRC_DIR)/*.cpp)
