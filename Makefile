@@ -18,12 +18,17 @@ C = $(words $N)$(eval N := x $N)
 ECHO = echo "`expr "   [\`expr $C '*' 100 / $T\`" : '.*\(....\)$$'`%]"
 endif
 
-all:	$(BIN)
+all: $(BIN)
 	@$(ECHO) All done
 
-$(BIN):	$(OBJ)
+$(BIN):	folder $(OBJ)
 	@$(ECHO) Linking $@
 	$(CC) -o $(BIN) $(CFLAGS) $(INCLUDE) $(OBJ) $(GFLAGS)
+
+folder:
+	if ! [ -d "obj" ]; then \
+		mkdir obj; \
+	fi
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@$(ECHO) Compiling $@
