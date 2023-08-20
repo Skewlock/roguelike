@@ -1,6 +1,6 @@
 CC		= g++
-CFLAGS	= 
-INCLUDE	= -I ./olcPixelGameEngine -I ./include
+CFLAGS	= -Wall -Wextra
+INCLUDE	= -I ./include
 GFLAGS	= -lSDL2_image -g `sdl2-config --cflags --libs`
 SRC_DIR	= src
 OBJ_DIR	= obj
@@ -11,7 +11,7 @@ BIN		= game.bin
 ifndef ECHO
 T := $(shell $(MAKE) $(MAKECMDGOALS) --no-print-directory \
       -nrRf $(firstword $(MAKEFILE_LIST)) \
-      ECHO="COUNTTHIS" | grep -c "COUNTTHIS"))
+      ECHO="COUNTTHIS" | grep -c "COUNTTHIS")
 
 N := x
 C = $(words $N)$(eval N := x $N)
@@ -23,7 +23,7 @@ all:	$(BIN)
 
 $(BIN):	$(OBJ)
 	@$(ECHO) Linking $@
-	$(CC) main.cpp -o $(BIN) $(CFLAGS) $(INCLUDE) $(GFLAGS) $(OBJ)
+	$(CC) -o $(BIN) $(CFLAGS) $(INCLUDE) $(OBJ) $(GFLAGS)
 
 $(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
 	@$(ECHO) Compiling $@

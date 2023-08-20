@@ -1,5 +1,6 @@
 #include "engine.hpp"
 
+
 Engine::Engine(int w, int h)
 {
     this->appName = "Roguelike";
@@ -13,7 +14,7 @@ Engine::Engine(int w, int h)
         std::cout << SDL_GetError() << std::endl;
         return;
     }
-    this->window = SDL_CreateWindow(this->appName, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, h, w, 0);
+    this->window = SDL_CreateWindow(this->appName, SDL_WINDOWPOS_CENTERED, SDL_WINDOWPOS_CENTERED, this->width, this->height, 0);
     if (!this->window)
     {
         std::cout << "Failed to create SDL window" << std::endl;
