@@ -8,6 +8,9 @@ SRCS	= $(wildcard $(SRC_DIR)/*.cpp)
 OBJ		= $(patsubst $(SRC_DIR)/%.cpp, $(OBJ_DIR)/%.o, $(SRCS))
 BIN		= game.bin
 
+# ===============================================
+# 				progression indicator
+# ===============================================
 ifndef ECHO
 T := $(shell $(MAKE) $(MAKECMDGOALS) --no-print-directory \
       -nrRf $(firstword $(MAKEFILE_LIST)) \
@@ -30,9 +33,12 @@ folder:
 		mkdir obj; \
 	fi
 
-$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp
+$(OBJ_DIR)/%.o: $(SRC_DIR)/%.cpp osdetection
 	@$(ECHO) Compiling $@
 	$(CC) $(CFLAGS) $(INCLUDE) -o $@ -c $<
+
+osdetection:
+	@echo $(OSFLAG)
 
 clean:
 	@$(ECHO) Clean done

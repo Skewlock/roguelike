@@ -1,14 +1,23 @@
 #include "engine.hpp"
 
+SDL_Renderer *Engine::renderer = nullptr;
+bool Engine::closeWindow = false;
 
+GameObject *player = new GameObject("assets/img/cube.png", 0, 0, 64, 64);
+
+/**
+ * @brief Construct a new Engine:: Engine object
+ * 
+ * @param w width of the window
+ * @param h height of the window
+ */
 Engine::Engine(int w, int h)
 {
     this->appName = "Roguelike";
     this->width = w;
     this->height = h;
-    this->closeWindow = false;
 
-    if (SDL_Init(SDL_INIT_VIDEO|SDL_INIT_AUDIO) != 0)
+    if (SDL_Init(SDL_INIT_EVERYTHING) != 0)
     {
         std::cout << "Failed to initiate SDL Lib:" << std::endl;
         std::cout << SDL_GetError() << std::endl;
@@ -21,92 +30,57 @@ Engine::Engine(int w, int h)
         std::cout << SDL_GetError() << std::endl;
         return;
     }
-    this->screen = SDL_GetWindowSurface(this->window);
+ /*   this->screen = SDL_GetWindowSurface(this->window);
     if (!this->screen)
     {
         std::cout << "SDL2 error:" << std::endl;
         std::cout << SDL_GetError() << std::endl;
         return;
-    }
-    this->renderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED);
+    }*/
+    Engine::renderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED);
+    SDL_SetRenderDrawColor(Engine::renderer, 255, 255, 255, 255);
+    this->eventManager = new EventManager();
+    SDL_Surface *temp = IMG_Load("assets/img/icon.png");
+    SDL_SetWindowIcon(this->window, temp);
+    SDL_FreeSurface(temp);
 }
 
+/**
+ * @brief Destroy the Engine:: Engine object
+ * 
+ */
 Engine::~Engine()
 {   
-    SDL_DestroyRenderer(renderer);
-    SDL_FreeSurface(this->screen);
+    SDL_DestroyRenderer(Engine::renderer);
+    //SDL_FreeSurface(this->screen);
     SDL_DestroyWindow(this->window);
+    delete this->eventManager;
     SDL_Quit();
 }
 
 /**
- * @brief update the app (executed every tick)
+ * @brief the game loop (executed every tick)
  * 
  */
 void Engine::loop(void)
 {
-    SDL_Event event;
-    while (!this->closeWindow)
+    while (!Engine::closeWindow)
     {
-        while (SDL_PollEvent(&event) != 0)
-        {
-            switch (event.type)
-            {
-            case SDL_KEYDOWN:
-                this->keyboardEventHandler(&event);
-                break;
-            case SDL_QUIT:
-                this->closeWindow = true;
-                break;
-            
-            case SDL_WINDOWEVENT:
-                this->windowEventHandler(&event);
-                break;
-
-            default:
-                break;
-            }
-        }
+        this->eventManager->pollEvent();
+        player->update();
+        this->draw();
     }
+    delete player;
 }
 
 
 /**
- * @brief draw the new frame (executed every tick)
+ * @brief draw the new frame to the screen
  * 
  */
-void Engine::draw(SDL_Texture *char_tex)
+void Engine::draw(void)
 {
-    //SDL_FillRect(this->screen, NULL, SDL_MapRGB(this->screen->format, 255, 255, 255));
-    SDL_RenderClear(renderer);
-    SDL_RenderCopy(renderer, char_tex, NULL, NULL);
-    SDL_RenderPresent(renderer);
-    SDL_UpdateWindowSurface(this->window);
-}
-
-/**
- * @brief handle keyboard events
- * 
- * @param event 
- */
-void Engine::keyboardEventHandler(SDL_Event *event)
-{
-
-}
-
-/**
- * @brief manage the events related to the window
- * 
- */
-void Engine::windowEventHandler(SDL_Event *event)
-{
-    switch (event->window.event)
-    {
-        // SDL_QUIT might not always work so to be sure this one does !
-        case SDL_WINDOWEVENT_CLOSE:
-            this->closeWindow = true;
-            break;
-        case SDL_WINDOWEVENT_SIZE_CHANGED:
-            this->screen = SDL_GetWindowSurface(this->window);
-    }
+    SDL_RenderClear(Engine::renderer);
+    player->draw();
+    SDL_RenderPresent(Engine::renderer);
 }
