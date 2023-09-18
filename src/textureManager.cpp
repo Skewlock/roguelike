@@ -24,12 +24,10 @@ SDL_Texture *TextureManager::loadTexture(const char *filename)
  * @param w width of the texture
  * @param h height of the texture
  */
-void TextureManager::drawTexture(SDL_Texture *texture, int x, int y, int w, int h)
+void TextureManager::drawTexture(SDL_Texture *texture, SDL_Rect *src, SDL_Rect *dest)
 {
-    SDL_Rect dest;
-    dest.x = x;
-    dest.y = y;
-    dest.h = h;
-    dest.w = w;
-    SDL_RenderCopy(Engine::renderer, texture, NULL, &dest);
+    int ret = 0;
+    ret = SDL_RenderCopy(Engine::renderer, texture, src, dest);
+    if (ret != 0)
+        std::cout << SDL_GetError() << std::endl;
 }

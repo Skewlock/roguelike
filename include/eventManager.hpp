@@ -10,5 +10,6 @@ class EventManager
         ~EventManager();
         void pollEvent();
         void windowEventHandler();
-        void keyboardEventHandler();
+        void keyboardEventPressedHandler();
+        void keyboardEventReleasedHandler();
 };

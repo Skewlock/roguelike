@@ -1,9 +1,8 @@
 #include "engine.hpp"
+#include "player.hpp"
 
 SDL_Renderer *Engine::renderer = nullptr;
 bool Engine::closeWindow = false;
-
-GameObject *player = new GameObject("assets/img/cube.png", 0, 0, 64, 64);
 
 /**
  * @brief Construct a new Engine:: Engine object
@@ -30,16 +29,11 @@ Engine::Engine(int w, int h)
         std::cout << SDL_GetError() << std::endl;
         return;
     }
- /*   this->screen = SDL_GetWindowSurface(this->window);
-    if (!this->screen)
-    {
-        std::cout << "SDL2 error:" << std::endl;
-        std::cout << SDL_GetError() << std::endl;
-        return;
-    }*/
     Engine::renderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED);
     SDL_SetRenderDrawColor(Engine::renderer, 255, 255, 255, 255);
     this->eventManager = new EventManager();
+    this->engineConfig = new EngineConfig();
+    this->objectManager = new ObjectManager();
     SDL_Surface *temp = IMG_Load("assets/img/icon.png");
     SDL_SetWindowIcon(this->window, temp);
     SDL_FreeSurface(temp);
@@ -52,10 +46,23 @@ Engine::Engine(int w, int h)
 Engine::~Engine()
 {   
     SDL_DestroyRenderer(Engine::renderer);
-    //SDL_FreeSurface(this->screen);
     SDL_DestroyWindow(this->window);
     delete this->eventManager;
+    delete this->engineConfig;
+    delete this->objectManager;
     SDL_Quit();
+}
+
+/**
+ * @brief setup the game, executed one time before game loop
+ * 
+ */
+void Engine::setup(void)
+{
+    Player *player = new Player("assets/img/cube.png", 5, 0, 0, 64, 64);
+    this->objectManager->addObject(player);
+    std::cout << this->objectManager->getObjectId(player) << std::endl;
+    std::cout << this->objectManager->getObject(0) << std::endl;
 }
 
 /**
@@ -66,11 +73,12 @@ void Engine::loop(void)
 {
     while (!Engine::closeWindow)
     {
+        this->engineConfig->limitFps1();
         this->eventManager->pollEvent();
-        player->update();
+        this->objectManager->updateObjects();
         this->draw();
+        this->engineConfig->limitFps2();
     }
-    delete player;
 }
 
 
@@ -81,6 +89,6 @@ void Engine::loop(void)
 void Engine::draw(void)
 {
     SDL_RenderClear(Engine::renderer);
-    player->draw();
+    this->objectManager->drawObjects();
     SDL_RenderPresent(Engine::renderer);
 }

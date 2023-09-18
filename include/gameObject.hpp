@@ -1,11 +1,10 @@
 #pragma once
 #include <SDL2/SDL.h>
 #include "textureManager.hpp"
-#include "engine.hpp"
 
 class GameObject
 {
-    private:
+    protected:
 
         SDL_Texture *texture;
         int x;
@@ -17,6 +16,6 @@ class GameObject
 
         GameObject(const char *filename, int x, int y, int w, int h);
         ~GameObject();
-        void draw();
-        void update();
+        void draw(void);
+        virtual void update(void);
 };

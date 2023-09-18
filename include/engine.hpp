@@ -5,6 +5,8 @@
 #include <string>
 #include "eventManager.hpp"
 #include "gameObject.hpp"
+#include "engineConfig.hpp"
+#include "objectManager.hpp"
 
 class Engine
 {
@@ -14,6 +16,8 @@ class Engine
         SDL_Window *window;
 
         EventManager *eventManager;
+        EngineConfig *engineConfig;
+        ObjectManager *objectManager;
 
         const char *appName;
         int width;
@@ -26,9 +30,7 @@ class Engine
         static SDL_Renderer *renderer;
         static bool closeWindow;
 
-        void inputHandler(void);
+        void setup(void);
         void loop(void);
         void draw(void);
-        void keyboardEventHandler(SDL_Event *event);
-        void windowEventHandler(SDL_Event *event);
 };
