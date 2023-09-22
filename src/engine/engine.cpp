@@ -3,6 +3,7 @@
 
 SDL_Renderer *Engine::renderer = nullptr;
 bool Engine::closeWindow = false;
+ObjectManager *Engine::objectManager = nullptr;
 
 /**
  * @brief Construct a new Engine:: Engine object
@@ -32,8 +33,8 @@ Engine::Engine(int w, int h)
     Engine::renderer = SDL_CreateRenderer(this->window, -1, SDL_RENDERER_ACCELERATED);
     SDL_SetRenderDrawColor(Engine::renderer, 255, 255, 255, 255);
     this->eventManager = new EventManager();
-    this->engineConfig = new EngineConfig();
-    this->objectManager = new ObjectManager();
+    this->engineConfig = new EngineConfig(60);
+    Engine::objectManager = new ObjectManager();
     SDL_Surface *temp = IMG_Load("assets/img/icon.png");
     SDL_SetWindowIcon(this->window, temp);
     SDL_FreeSurface(temp);
@@ -49,7 +50,7 @@ Engine::~Engine()
     SDL_DestroyWindow(this->window);
     delete this->eventManager;
     delete this->engineConfig;
-    delete this->objectManager;
+    delete Engine::objectManager;
     SDL_Quit();
 }
 
@@ -60,9 +61,9 @@ Engine::~Engine()
 void Engine::setup(void)
 {
     Player *player = new Player("assets/img/cube.png", 5, 0, 0, 64, 64);
-    this->objectManager->addObject(player);
-    std::cout << this->objectManager->getObjectId(player) << std::endl;
-    std::cout << this->objectManager->getObject(0) << std::endl;
+    Engine::objectManager->addObject(player);
+    std::cout << Engine::objectManager->getObjectId(player) << std::endl;
+    std::cout << Engine::objectManager->getObject((unsigned long)0) << std::endl;
 }
 
 /**
@@ -89,6 +90,6 @@ void Engine::loop(void)
 void Engine::draw(void)
 {
     SDL_RenderClear(Engine::renderer);
-    this->objectManager->drawObjects();
+    Engine::objectManager->drawObjects();
     SDL_RenderPresent(Engine::renderer);
 }

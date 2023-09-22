@@ -12,8 +12,8 @@ class ObjectManager
         ObjectManager();
         ~ObjectManager();
         int addObject(GameObject *obj);
-        void removeObject(int id);
-        GameObject *getObject(int id);
+        void removeObject(long unsigned int id);
+        GameObject *getObject(long unsigned int id);
         int getObjectId(GameObject *obj);
         void updateObjects(void);
         void drawObjects(void);

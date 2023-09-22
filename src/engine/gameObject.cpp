@@ -40,8 +40,8 @@ void GameObject::draw(void)
     SDL_Rect src;
     
     SDL_QueryTexture(this->texture, &format, &access, &width, &height);
-    dest.x = this->x;
-    dest.y = this->y;
+    dest.x = this->x - this->w/2;
+    dest.y = this->y - this->h/2;
     dest.w = this->w;
     dest.h = this->h;
     src.x = src.y = 0;

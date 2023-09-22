@@ -7,4 +7,5 @@ class Controller
         static bool down;
         static bool left;
         static bool right;
+        static bool summon;
 };

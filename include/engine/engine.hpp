@@ -17,7 +17,6 @@ class Engine
 
         EventManager *eventManager;
         EngineConfig *engineConfig;
-        ObjectManager *objectManager;
 
         const char *appName;
         int width;
@@ -29,6 +28,7 @@ class Engine
 
         static SDL_Renderer *renderer;
         static bool closeWindow;
+        static ObjectManager *objectManager;
 
         void setup(void);
         void loop(void);

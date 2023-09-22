@@ -1,4 +1,5 @@
 #include "objectManager.hpp"
+#include <iostream>
 
 /**
  * @brief Construct a new Object Manager:: Object Manager object
@@ -33,7 +34,7 @@ int ObjectManager::addObject(GameObject *obj)
  * 
  * @param id object id
  */
-void ObjectManager::removeObject(int id)
+void ObjectManager::removeObject(long unsigned int id)
 {
     if (id == this->objectList.size() - 1)
         this->objectList.pop_back();
@@ -47,7 +48,7 @@ void ObjectManager::removeObject(int id)
  * @param id object id
  * @return GameObject* 
  */
-GameObject *ObjectManager::getObject(int id)
+GameObject *ObjectManager::getObject(long unsigned int id)
 {
     return this->objectList[id];
 }
@@ -77,7 +78,10 @@ int ObjectManager::getObjectId(GameObject *obj)
 void ObjectManager::updateObjects(void)
 {
     for (GameObject *obj : this->objectList)
+    {
+        std::cout << obj << std::endl;
         obj->update();
+    }
 }
 
 /**
@@ -87,5 +91,7 @@ void ObjectManager::updateObjects(void)
 void ObjectManager::drawObjects(void)
 {
     for (GameObject *obj : this->objectList)
+    {
         obj->draw();
+    }
 }

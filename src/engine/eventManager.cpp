@@ -82,6 +82,9 @@ void EventManager::keyboardEventPressedHandler()
         case SDLK_LEFT:
             Controller::left = true;
             break;
+        case SDLK_e:
+            Controller::summon = true;
+            break;
         default:
             break;
     }
@@ -106,6 +109,9 @@ void EventManager::keyboardEventReleasedHandler()
         case SDLK_q:
         case SDLK_LEFT:
             Controller::left = false;
+            break;
+        case SDLK_e:
+            Controller::summon = false;
             break;
         default:
             break;
